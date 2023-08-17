@@ -1,0 +1,6 @@
+fastapi[all]
+uvicorn
+beanie[odm]
+motor
+bcrypt
+pyjwt
