@@ -1,11 +1,12 @@
-from beanie import init_beanie
 import motor.motor_asyncio
-from .settings import settings
-from app.models import User, Post, Comment
+from beanie import init_beanie
+from ..models.user import User
+from ..models.post import Post
+from ..models.comment import Comment
+import settings 
 
-async def init():
-    client = motor.motor_asyncio.AsyncIOMotorClient(settings.database_url)
-    database = client.get_default_database()
-    
-    # Initialize beanie for each data model
-    await init_beanie(database, document_models=[User, Post, Comment])
+client = MongoClient(settings.mongodb_uri, settings.port)
+db = client[instagram]]
+
+# Initialize Beanie after defining the models
+init_beanie(database, document_models=[User, Post, Comment])

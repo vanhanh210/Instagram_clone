@@ -1,19 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
-from app.models.post import Post
-from app.dependencies.security import get_current_user
+from fastapi import APIRouter, Depends, File, UploadFile
+from ..models.user import User
+from ..models.post import Post
+from ..dependencies.security import get_current_user
 
 router = APIRouter()
 
-class PostCreate(BaseModel):
-    caption: str
-
 @router.post("/post/")
-async def create_post(post: PostCreate, user=Depends(get_current_user), file: UploadFile = File(...)):
-    # You'd typically save the image and get its URL. For simplicity, I'm using a placeholder URL.
-    image_url = "path_to_saved_image"
-    new_post = await Post(user_id=user.id, image_url=image_url, caption=post.caption).insert()
-    return new_post
-
-@router.get("/posts/")
-async def get_all_posts():
-    return await Post.all()
+async def post_image(image: UploadFile = File(...), current_user: User = Depends(get_current_user)):
+    post = Post(user_id=current_user.id, image=image.filename)
+    await post.insert()
+    return {"image": image.filename, "user": current_user.username}
