@@ -6,9 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from app.models.user import User
 from passlib.context import CryptContext
 
-# JWT settings
-SECRET_KEY = "cf9339f327f169a14020f9ee4d5bc5f3ff63d3f025906a385ede4047052f7881"
-ALGORITHM = "HS256" 
+
 # Password encryption and verification
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
