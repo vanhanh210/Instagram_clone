@@ -65,7 +65,6 @@ async def signup_and_get_access_token(form_data: OAuth2PasswordRequestForm = Dep
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-# Placeholder function; replace with your actual user fetching logic
 def get_user(email: EmailStr):
     user_data = users_collection.find_one({"email": email})
     return user_data    
@@ -82,13 +81,19 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = get_user(email=form_data.username)
-    if not user:
+    user_data = get_user(email=form_data.username)
+    if not user_data:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
-    if not user.verify_password(form_data.password):
+    
+    hashed_password = user_data.get("hashed_password")
+    if not pwd_context.verify(form_data.password, hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
+    
+    # Generate an access token for the user
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username, "email": user.email}, expires_delta=access_token_expires
+        data={"sub": user_data["email"], "email": user_data["email"]}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+# ... (other route definitions if needed)
