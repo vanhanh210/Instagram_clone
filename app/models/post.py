@@ -1,9 +1,13 @@
-from datetime import datetime
+from pydantic import BaseModel
+from fastapi import UploadFile, File
+from app.models.user import User
 
-from beanie import Document
+class PostCreate(BaseModel):
+    caption: str
+    image: UploadFile = File(...)
 
-
-class Post(Document):
+class Post(BaseModel):
+    id: str
     user_id: str
-    image: str
-    timestamp: datetime = datetime.now()
+    caption: str  
+    image_path: str 

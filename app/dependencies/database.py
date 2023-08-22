@@ -1,10 +1,13 @@
-import motor.motor_asyncio
-from beanie import init_beanie
+from pymongo import MongoClient
+from app.settings import DATABASE_URL, DATABASE_NAME  # Importing centralized configurations
 
-from app.models.user import User
+# Ensure the client is initialized only once
+if 'client' not in locals():
+    client = MongoClient(DATABASE_URL)  # Using the centralized connection string
 
-client = motor.motor_asyncio.AsyncIOMotorClient("mongodb://localhost:27017/?directConnection=true")
-database = client["instagram"]
+db = client[DATABASE_NAME]  # Using the centralized database name
 
-# Initialize Beanie with the User model
-init_beanie(database, document_models=[User])
+# Define collections
+users_collection = db["users"]
+posts_collection = db["posts"]
+comments_collection = db["comments"]

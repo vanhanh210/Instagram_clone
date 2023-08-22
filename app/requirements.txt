@@ -1,0 +1,8 @@
+fastapi
+beanie
+uvicorn
+motor
+passlib
+pydantic[email]
+jose[3.3.0]
+pip install python-multipart
