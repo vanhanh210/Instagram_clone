@@ -77,5 +77,5 @@ DATABASE_NAME = "instagram"
 - https://www.mongodb.com
 - https://www.ibm.com/topics/rest-apis
 - https://viblo.asia/p/tich-hop-fastapi-voi-authentication-bang-jwt-XL6lA6rR5ek
-
+- https://zapier.com/engineering/apikey-oauth-jwt/
 
