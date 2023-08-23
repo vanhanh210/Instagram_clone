@@ -7,7 +7,7 @@ from app.routers import authentication, comments, posts
 
 app = FastAPI()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  # assuming your login route is named "login"
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")  # assuming your login route is named "login"
 
 app.include_router(authentication.router)
 app.include_router(posts.router)

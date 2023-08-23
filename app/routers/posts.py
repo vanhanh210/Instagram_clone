@@ -1,41 +1,40 @@
-import os
-import uuid
-
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, Header
-from fastapi.security import OAuth2PasswordBearer
-
-from app.dependencies.database import posts_collection
-from app.dependencies.security import get_current_user, oauth2_scheme
-from app.models.post import Post, PostCreate
-from app.models.user import User
+from fastapi import APIRouter, Depends, HTTPException
+from app.dependencies.database import posts_collection, comments_collection
+from app.dependencies.security import reusable_oauth2, validate_token
+from app.models.post import Post
 
 router = APIRouter()
 
-@router.post("/create-post", response_model=str)
-async def create_post(
-    caption: str = Form(...),
-    image: UploadFile = File(...),
-    current_user: User = Depends(get_current_user),
-    token: str = Depends(oauth2_scheme)  # Use oauth2_scheme as a dependency
-):
-    # Verify the access token (optional, depending on your use case)
-    if authorization != "Bearer " + current_user.access_token:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+@router.post("/create-post",)
+async def create_post(caption: str, token: str = Depends(reusable_oauth2)):
+    validate_token(token.credentials)
     
-    # Save the uploaded image
-    image_filename = os.path.join("uploads", f"{uuid.uuid4()}_{image.filename}")
-    with open(image_filename, "wb") as buffer:
-        buffer.write(image.file.read())
-    
-    # Create post data
     post_data = {
-        "id": str(uuid.uuid4()),
-        "user_id": current_user.id,
         "caption": caption,
-        "image_path": image_filename
     }
     
-    # Insert post data into the database
-    posts_collection.insert_one(post_data)
+    result = posts_collection.insert_one(post_data)
     
-    return {"post_id": post_data["id"]}
+    if result:
+        return {
+            "message": "Post created",
+            "post_id": str(result.inserted_id),
+        }
+    else:
+        raise HTTPException(status_code=500, detail="Could not create post")
+@router.get("/list-posts")
+async def list_posts(token: str = Depends(reusable_oauth2)):
+    validate_token(token.credentials)
+    
+    posts = list(posts_collection.find())
+
+    # Convert ObjectId to string for each post and fetch associated comments
+    for post in posts:
+        post["_id"] = str(post["_id"])
+        post_comments = list(comments_collection.find({"post_id": post["_id"]}))
+        # Convert ObjectId to string for each comment
+        for comment in post_comments:
+            comment["_id"] = str(comment["_id"])
+        post["comments"] = post_comments
+
+    return posts
