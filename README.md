@@ -71,3 +71,11 @@ DATABASE_NAME = "instagram"
 	setting.py
 	requirements.py	
 ```
+# Resource
+- https://fastapi.tiangolo.com
+- https://beanie-odm.dev/
+- https://www.mongodb.com
+- https://www.ibm.com/topics/rest-apis
+- https://viblo.asia/p/tich-hop-fastapi-voi-authentication-bang-jwt-XL6lA6rR5ek
+
+
