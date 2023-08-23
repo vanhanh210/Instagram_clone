@@ -73,6 +73,7 @@ DATABASE_NAME = "instagram"
 ```
 # Resource
 - https://fastapi.tiangolo.com
+- https://github.com/tiangolo/fastapi
 - https://beanie-odm.dev/
 - https://www.mongodb.com
 - https://www.ibm.com/topics/rest-apis
