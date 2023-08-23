@@ -1,5 +1,3 @@
-# app/routers/comments.py
-
 from fastapi import APIRouter, Depends, HTTPException, Form
 from app.dependencies.database import comments_collection
 from app.dependencies.security import reusable_oauth2, validate_token

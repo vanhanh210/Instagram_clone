@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 class CommentCreate(BaseModel):
     content: str
-    post_id: str  # We'll use this when creating a new comment
+    post_id: str  
 
 class Comment(BaseModel):
     id: str
