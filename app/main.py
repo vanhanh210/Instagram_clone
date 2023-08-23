@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
 
 from app.dependencies import \
+    database  # Assuming database connection is set up in dependencies/database.py
 from app.routers import authentication, comments, posts
 
 app = FastAPI()
